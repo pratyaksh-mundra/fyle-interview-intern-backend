@@ -1,3 +1,8 @@
+from core import db
+from core.models.assignments import Assignment, AssignmentStateEnum, GradeEnum
+
+
+
 def test_get_assignments_teacher_1(client, h_teacher_1):
     response = client.get(
         '/teacher/assignments',

@@ -2,7 +2,9 @@ import json
 from flask import request
 from core.libs import assertions
 from functools import wraps
-
+from core.models.principals import Principal
+from core.models.students import Student
+from core.models.teachers import Teacher
 
 class AuthPrincipal:
     def __init__(self, user_id, student_id=None, teacher_id=None, principal_id=None):
