@@ -72,26 +72,43 @@ class Assignment(db.Model):
 
         return assignment
 
-
     @classmethod
     def mark_grade(cls, _id, grade, auth_principal: AuthPrincipal):
         assignment = Assignment.get_by_id(_id)
         assertions.assert_found(assignment, 'No assignment with this id was found')
-        assertions.assert_valid(grade is not None, 'assignment with empty grade cannot be graded')
+        print(f"Assignment found: {assignment}")
+        
+        assertions.assert_valid(assignment.state != AssignmentStateEnum.DRAFT, 'Assignments in draft state cannot be graded')
+        # Allow both the teacher of the assignment and the principal to grade/regrade
+        is_teacher = assignment.teacher_id == auth_principal.user_id
+        is_principal = auth_principal.principal_id is not None
 
+        assertions.assert_valid(
+            is_teacher or is_principal,
+            'Only the teacher of the assignment or a principal can change grades'
+        )
+
+        print(f"AuthPrincipal: {auth_principal}")
+        print(f"Setting grade: {grade}")
         assignment.grade = grade
         assignment.state = AssignmentStateEnum.GRADED
         db.session.flush()
 
         return assignment
 
+
     @classmethod
     def get_assignments_by_student(cls, student_id):
         return cls.filter(cls.student_id == student_id).all()
 
-    def get_assignments_by_teacher(cls,teacher_id):
-        return cls.filter(cls.teacher_id == teacher_id).filter(cls.state!=AssignmentStateEnum.DRAFT).all()
+    @classmethod
+    def get_assignments_by_teacher(cls, teacher_id):
+        return cls.filter(cls.teacher_id == teacher_id, cls.state.in_([AssignmentStateEnum.SUBMITTED, AssignmentStateEnum.GRADED])).all()
 
     @classmethod
     def get_all_assignments(cls):
         return cls.filter(cls.state!= AssignmentStateEnum.DRAFT).all()
+
+    @classmethod
+    def list_assignments(cls):
+        return cls.filter(cls.state.in_([AssignmentStateEnum.SUBMITTED, AssignmentStateEnum.GRADED])).all()

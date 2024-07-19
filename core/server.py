@@ -6,13 +6,16 @@ from core.libs import helpers
 from core.apis.teachers import principal_teachers_resources
 from core.libs.exceptions import FyleError
 from werkzeug.exceptions import HTTPException
-
+from flask import Flask
 from sqlalchemy.exc import IntegrityError
+
+
 
 app.register_blueprint(student_assignments_resources, url_prefix='/student')
 app.register_blueprint(teacher_assignments_resources, url_prefix='/teacher')
 app.register_blueprint(principal_assignments_resources,url_prefix='/principal')
 app.register_blueprint(principal_teachers_resources,url_prefix='/principals')
+
 
 @app.route('/')
 def ready():
@@ -44,3 +47,4 @@ def handle_error(err):
         ), err.code
 
     raise err
+
