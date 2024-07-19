@@ -1,3 +1,4 @@
+#added imports
 from core import db
 from core.models.assignments import Assignment, AssignmentStateEnum
 
@@ -72,7 +73,7 @@ def test_submit_assignment_student_1(client, h_student_1):
         })
 
     assert response.status_code == 200
-
+    # added response
     response = response.json
     assert response
 
@@ -88,4 +89,4 @@ def test_assignment_resubmit_error(client, h_student_1):
     error_response = response.json
     assert response.status_code == 400
     assert error_response['error'] == 'FyleError'
-    assert error_response["message"] == 'Only a draft assignment can be submitted'
+    assert error_response["message"] == 'Only a draft assignment can be submitted' # changed the message

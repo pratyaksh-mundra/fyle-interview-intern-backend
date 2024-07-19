@@ -1,3 +1,4 @@
+# added imports
 from core import db
 from core.models.assignments import Assignment, AssignmentStateEnum, GradeEnum
 
@@ -107,20 +108,30 @@ def test_grade_assignment_draft_assignment(client, h_teacher_1):
     
 
     def test_grade_submitted_assignment_invalid(client, h_teacher_1):
+        """
+        Test case for grading a submitted assignment with an invalid grade.
+        This test ensures that the API responds with a 400 Bad Request status code
+        when an invalid grade is provided (e.g., grade "z" which is not in the allowed set of grades).
+        """
         response = client.post(
             '/teacher/assignments/grade',
             headers=h_teacher_1,
             json={
-                "id": 19,
-                "grade": "z"
+                "id": 19,  # ID of the assignment to be graded
+                "grade": "z"  # Invalid grade that should trigger an error
             }
         )
 
-        assert response.status_code == 400
+        assert response.status_code == 400  # Verify that the response status code is 400 Bad Request
 
     def test_grade_for_coverage(client, h_teacher_2):
+        """
+        Test case for grading a submitted assignment with a valid grade.
+        This test ensures that the API responds with a 200 OK status code when a valid grade (e.g., "C")
+        is provided for an assignment that exists and is in the correct state for grading.
+        """
         response = client.post(
             "/teacher/assignments/grade", headers=h_teacher_2, json={"id": 2, "grade": "C"}
         )
 
-        assert response.status_code == 200
+        assert response.status_code == 200  # Verify that the response status code is 200 OK

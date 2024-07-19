@@ -14,9 +14,23 @@ class Teacher(db.Model):
 
     @classmethod
     def filter(cls, *criterion):
+        """
+        Applies filters to the query for the class model.
+
+        :param criterion: Filtering criteria to apply to the query.
+        :return: Query object with the applied filters.
+        """
+        # Create a query object for the class model
         db_query = db.session.query(cls)
-        return db_query.filter(*criterion)    
-    
+        # Apply the provided filtering criteria
+        return db_query.filter(*criterion)
+
     @classmethod
     def get_all_teachers(cls):
+        """
+        Retrieves all teacher records from the database.
+
+        :return: List of all teacher records.
+        """
+        # Execute a query to get all records of the class model (Teacher)
         return cls.query.all()

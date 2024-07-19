@@ -1,12 +1,12 @@
 from flask import jsonify
 from marshmallow.exceptions import ValidationError
 from core import app
-from core.apis.assignments import student_assignments_resources, teacher_assignments_resources, principal_assignments_resources
+from core.apis.assignments import student_assignments_resources, teacher_assignments_resources, principal_assignments_resources # added principle resourse import
 from core.libs import helpers
-from core.apis.teachers import principal_teachers_resources
+from core.apis.teachers import principal_teachers_resources # added import
 from core.libs.exceptions import FyleError
 from werkzeug.exceptions import HTTPException
-from flask import Flask
+from flask import Flask # added import
 from sqlalchemy.exc import IntegrityError
 
 
